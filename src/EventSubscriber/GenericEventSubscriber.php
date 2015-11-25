@@ -96,4 +96,3 @@ class GenericEventSubscriber implements EventSubscriberInterface {
   }
 
 }
-a

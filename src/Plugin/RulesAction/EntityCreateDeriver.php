@@ -10,6 +10,7 @@ namespace Drupal\rules\Plugin\RulesAction;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -30,7 +31,12 @@ class EntityCreateDeriver extends DeriverBase implements ContainerDeriverInterfa
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
+  /**
+  * The entity field manager
+  *
+  * @var \Drupal\Core\Entity\EntityFieldManagerInterface;
+  */
+  protected $entityFieldManager
   /**
    * Creates a new EntityCreateDeriver object.
    *
@@ -39,8 +45,9 @@ class EntityCreateDeriver extends DeriverBase implements ContainerDeriverInterfa
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
    *   The string translation service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, TranslationInterface $string_translation) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, TranslationInterface $string_translation) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityFieldManager = $entity_field_manager;
     $this->stringTranslation = $string_translation;
   }
 
@@ -76,7 +83,7 @@ class EntityCreateDeriver extends DeriverBase implements ContainerDeriverInterfa
       // other required base fields. This matches the storage create() behavior,
       // where only the bundle requirement is enforced.
       $bundle_key = $entity_type->getKey('bundle');
-      $base_field_definitions = $this->entityTypeManager->getBaseFieldDefinitions($entity_type_id);
+      $base_field_definitions = $this->entityFieldManager->getBaseFieldDefinitions($entity_type_id);
       foreach ($base_field_definitions as $field_name => $definition) {
         if ($field_name != $bundle_key && !$definition->isRequired()) {
           continue;

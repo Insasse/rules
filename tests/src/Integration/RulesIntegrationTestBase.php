@@ -10,6 +10,7 @@ namespace Drupal\Tests\rules\Integration;
 use Drupal\Core\Cache\NullBackend;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -32,6 +33,12 @@ use Prophecy\Argument;
  * to delete an entity would mock the call to the entity API.
  */
 abstract class RulesIntegrationTestBase extends UnitTestCase {
+
+  /**
+   * @var \Drupal\Core\Entity\EntityManagerInterface|\Prophecy\Prophecy\ProphecyInterface
+   */
+  protected $entityManager;
+
 
   /**
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\Prophecy\Prophecy\ProphecyInterface
@@ -164,6 +171,9 @@ abstract class RulesIntegrationTestBase extends UnitTestCase {
 
     $this->aliasManager = $this->prophesize(AliasManagerInterface::class);
 
+    $this->entityManager = $this->prophesize(EntityManagerInterface::class);
+    $this->entityManager->getDefinitions()->willReturn([]);
+
     $this->entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
     $this->entityTypeManager->getDefinitions()->willReturn([]);
 
@@ -171,8 +181,9 @@ abstract class RulesIntegrationTestBase extends UnitTestCase {
     $this->entityFieldManager->getBaseFieldDefinitions()->willReturn([]);
 
     $this->entityTypeBundleInfo = $this->prophesize(EntityTypeBundleInfoInterface::class);
-    $this->entityTypeBundleInfo->getBundleInfo(Argument::any())->willReturn([]);
+    $this->entityTypeBundleInfo->getBundleInfo()->willReturn([]);
 
+    $container->set('entity.manager', $this->entityManager->reveal());
     $container->set('entity_type.manager', $this->entityTypeManager->reveal());
     $container->set('entity_field.manager', $this->entityFieldManager->reveal());
     $container->set('entity_type.bundle.info', $this->entityTypeBundleInfo->reveal());

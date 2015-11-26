@@ -63,6 +63,9 @@ abstract class RulesEntityIntegrationTestBase extends RulesIntegrationTestBase {
     $this->entityTypeManager->getDefinitions()
       ->willReturn(['test' => $entityType]);
 
+    $this->entityManager->getDefinitions()
+      ->willReturn(['test' => $entityType]);
+
     $this->entityAccess = $this->prophesize(EntityAccessControlHandlerInterface::class);
 
     $this->entityTypeManager->getAccessControlHandler(Argument::any())
@@ -71,10 +74,14 @@ abstract class RulesEntityIntegrationTestBase extends RulesIntegrationTestBase {
     // The base field definitions for our test entity aren't used, and would
     // require additional mocking.
     $this->entityFieldManager->getBaseFieldDefinitions('test')->willReturn([]);
+    $this->entityManager->getBaseFieldDefinitions('test')->willReturn([]);
 
     // Return some dummy bundle information for now, so that the entity manager
     // does not call out to the config entity system to get bundle information.
     $this->entityTypeBundleInfo->getBundleInfo(Argument::any())
+      ->willReturn(['test' => ['label' => 'Test']]);
+
+    $this->entityManager->getBundleInfo(Argument::any())
       ->willReturn(['test' => ['label' => 'Test']]);
 
     $this->moduleHandler->getImplementations('entity_type_build')

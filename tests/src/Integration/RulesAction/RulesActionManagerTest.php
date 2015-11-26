@@ -9,6 +9,7 @@ namespace Drupal\Tests\rules\Integration\RulesAction;
 
 use Drupal\Tests\rules\Integration\RulesIntegrationTestBase;
 
+
 /**
  * Tests the Rules action manager.
  *

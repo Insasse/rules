@@ -74,7 +74,7 @@ class EntityFetchById extends RulesActionBase implements ContainerFactoryPluginI
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')
+      $container->get('entity.manager')
     );
   }
 

@@ -74,7 +74,7 @@ abstract class RulesEntityIntegrationTestBase extends RulesIntegrationTestBase {
 
     // Return some dummy bundle information for now, so that the entity manager
     // does not call out to the config entity system to get bundle information.
-    $this->entityTypeBundleManager->getBundleInfo(Argument::any())
+    $this->entityTypeBundleInfo->getBundleInfo(Argument::any())
       ->willReturn(['test' => ['label' => 'Test']]);
 
     $this->moduleHandler->getImplementations('entity_type_build')

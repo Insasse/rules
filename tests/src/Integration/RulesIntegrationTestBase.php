@@ -12,7 +12,7 @@ use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityTypeBundleManagerInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\TypedData\TypedDataManager;
@@ -44,9 +44,9 @@ abstract class RulesIntegrationTestBase extends UnitTestCase {
   protected $entityFieldManager;
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeBundleManagerInterface|\Prophecy\Prophecy\ProphecyInterface
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface|\Prophecy\Prophecy\ProphecyInterface
    */
-  protected $entityTypeBundledManager;
+  protected $entityTypeBundledInfo;
 
 
   /**
@@ -170,12 +170,12 @@ abstract class RulesIntegrationTestBase extends UnitTestCase {
     $this->entityFieldManager = $this->prophesize(EntityFieldManagerInterface::class);
     $this->entityFieldManager->getBaseFieldDefinitions()->willReturn([]);
 
-    $this->entityTypeBundleManager = $this->prophesize(EntityTypeBundleManagerInterface::class);
-    $this->entityTypeBundleManager->getBundleInfo(Argument::any())->willReturn([]);
+    $this->entityTypeBundleInfo = $this->prophesize(EntityTypeBundleInfoInterface::class);
+    $this->entityTypeBundleInfo->getBundleInfo(Argument::any())->willReturn([]);
 
     $container->set('entity_type.manager', $this->entityTypeManager->reveal());
     $container->set('entity_field.manager', $this->entityFieldManager->reveal());
-    $container->set('entity_type.bundle.info', $this->entityTypeBundleManager->reveal());
+    $container->set('entity_type.bundle.info', $this->entityTypeBundleInfo->reveal());
     $container->set('path.alias_manager', $this->aliasManager->reveal());
     $container->set('plugin.manager.rules_action', $this->actionManager);
     $container->set('plugin.manager.condition', $this->conditionManager);

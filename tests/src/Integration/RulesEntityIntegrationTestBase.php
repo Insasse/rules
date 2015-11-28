@@ -80,6 +80,7 @@ abstract class RulesEntityIntegrationTestBase extends RulesIntegrationTestBase {
     ];
 
     $type_array = [];
+
     foreach ($type_info as $type => $info) {
       $entity_type = new ContentEntityType($info);
       $type_array[$type] = $entity_type;
